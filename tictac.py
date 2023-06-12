@@ -27,19 +27,22 @@ class Board:
         self.board[row][col] = self.symbols[player]
 
     def is_win(self, row, col):
-        vecs = np.array([[1, 1], [0, 1], [1, 0]])
-        pos = np.array([row, col])
-        symbol = self.board[pos[0]][pos[1]]
+        vecs = np.array([[1, 1], [0, 1], [1, 0], [1, -1]])
+        symbol = self.board[row][col]
         for vec in vecs:
-            pos = np.array([row, col])
-            for i in range(2):
-                pos = (pos + vec) % 3
+            first_pos = np.array([row, col])
+            for i in range(3):
+                pos = (first_pos + i * vec) % 3
+                if vec[0] * vec[1] == 1 and tuple(pos) == (0, 2):
+                    break
+                if vec[0] * vec[1] == -1 and tuple(pos) == (0, 0):
+                    break
                 if self.board[pos[0]][pos[1]] != symbol:
                     break
-                elif i == 1:
+                elif i == 2:
                     return True
         return False
-    
+
     def print_board(self):
         os.system('clear')
         div = '---' + '|---' * 2
